@@ -3,10 +3,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Module
+# Module Parameter Store
 module "parameter_store" {
-  source = "./modules"
-
+  source = "./modules/parameter_store"
   parameter_names = var.parameter_names
 }
+
 
