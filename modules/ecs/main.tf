@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "cluster" {
-  name = "unum"
+  name = var.clustername
 }
 
 resource "aws_ecs_task_definition" "task" {
@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "task" {
 resource "aws_security_group" "lb_sg" {
   name        = "lb_sg"
   description = "Allow TLS inbound traffic"
-  vpc_id      = "vpc-abcde012"
+  vpc_id      = "vpc-05bb20e5204f2c6b4"
 
   ingress {
     from_port   = 8444
@@ -38,13 +38,13 @@ resource "aws_security_group" "lb_sg" {
 }
 
 resource "aws_lb" "lb" {
-  name               = "my-lb"
+  name               = "web-ui"
   internal           = false
   load_balancer_type = "network"
-  subnets            = ["subnet-abcde012", "subnet-bcde012a", "subnet-fghi345a"]
+  subnets            = ["subnet-0423a1b05695ac070", "subnet-0b9e3ce12a1c5ae9f"]
   security_groups    = [aws_security_group.lb_sg.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource "aws_lb_listener" "listener" {
