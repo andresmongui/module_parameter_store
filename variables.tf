@@ -8,5 +8,5 @@ variable "parameter_names" {
 variable "clustername" {
   description = "nombre del cluster"
   type        = string
-  default     = "Unum"
 }
+
