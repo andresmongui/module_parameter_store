@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "cluster" {
 resource "aws_ecs_task_definition" "task" {
   family                   = "service"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE_SPOT"]
+  requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
 
@@ -77,7 +77,7 @@ resource "aws_ecs_service" "service" {
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.task.arn
   desired_count   = 1
-  launch_type     = "FARGATE_SPOT"
+  launch_type     = "FARGATE"
   network_configuration {
     security_groups = [aws_security_group.fargate_sg.id]
     subnets         = ["subnet-0423a1b05695ac070", "subnet-0b9e3ce12a1c5ae9f"]
@@ -87,6 +87,24 @@ resource "aws_ecs_service" "service" {
     target_group_arn = aws_lb_target_group.group.arn
     container_name   = "service"
     container_port   = 8080
+  }
+}
+
+resource "aws_lb_target_group" "group" {
+  name     = "my-targets"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = "vpc-05bb20e5204f2c6b4"
+
+  health_check {
+    enabled             = true
+    interval            = 30
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 3
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
   }
 }
 
