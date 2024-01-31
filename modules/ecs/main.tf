@@ -3,21 +3,21 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_ecs_task_definition" "task" {
-  family                = "service"
-  network_mode          = "awsvpc"
+  family                   = "service"
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE_SPOT"]
-  cpu                   = "256"
-  memory                = "512"
-  
+  cpu                      = "256"
+  memory                   = "512"
+
   container_definitions = jsonencode([
     {
-      "name": "service",
-      "image": "service:latest",
-      "essential": true,
-      "portMappings": [
+      "name" : "service",
+      "image" : "service:latest",
+      "essential" : true,
+      "portMappings" : [
         {
-          "containerPort": 8080,
-          "hostPort": 8080
+          "containerPort" : 8080,
+          "hostPort" : 8080
         }
       ]
     }
@@ -51,7 +51,7 @@ resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_lb.lb.arn
   port              = "8444"
   protocol          = "TLS"
-  certificate_arn   = "arn:aws:acm:us-west-2:123456789012:certificate/7a58ad"
+  certificate_arn   = "arn:aws:acm:us-east-2:782823230069:certificate/fee45c25-a392-4a81-97fc-0ad158641eba"
 
   default_action {
     type             = "forward"
@@ -62,7 +62,7 @@ resource "aws_lb_listener" "listener" {
 resource "aws_security_group" "fargate_sg" {
   name        = "fargate_sg"
   description = "Allow inbound traffic"
-  vpc_id      = "vpc-abcde012"
+  vpc_id      = "vpc-05bb20e5204f2c6b4"
 
   ingress {
     from_port   = 8080
@@ -80,7 +80,7 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE_SPOT"
   network_configuration {
     security_groups = [aws_security_group.fargate_sg.id]
-    subnets         = ["subnet-abcde012", "subnet-bcde012a", "subnet-fghi345a"]
+    subnets         = ["subnet-0423a1b05695ac070", "subnet-0b9e3ce12a1c5ae9f"]
   }
 
   load_balancer {
