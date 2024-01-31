@@ -51,7 +51,7 @@ resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_lb.lb.arn
   port              = "8444"
   protocol          = "TLS"
-  certificate_arn   = "arn:aws:acm:us-east-2:782823230069:certificate/fee45c25-a392-4a81-97fc-0ad158641eba"
+  certificate_arn   = "arn:aws:acm:us-east-1:782823230069:certificate/05ee3dfa-6e0d-41cc-b927-9987b150c021"
 
   default_action {
     type             = "forward"
