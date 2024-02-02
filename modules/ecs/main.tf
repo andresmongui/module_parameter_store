@@ -16,8 +16,8 @@ resource "aws_ecs_task_definition" "task" {
       "essential" : true,
       "portMappings" : [
         {
-          "containerPort" : 8080,
-          "hostPort" : 8080
+          "containerPort" : 80,
+          "hostPort" : 80
         }
       ]
     }
@@ -73,8 +73,8 @@ resource "aws_security_group" "fargate_sg" {
   vpc_id      = "vpc-05bb20e5204f2c6b4"
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -102,13 +102,13 @@ resource "aws_ecs_service" "service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.group.arn
     container_name   = "nginx"
-    container_port   = 8080
+    container_port   = 80
   }
 }
 
 resource "aws_lb_target_group" "group" {
   name        = "web-ui"
-  port        = 8080
+  port        = 80
   protocol    = "TCP"
   vpc_id      = "vpc-05bb20e5204f2c6b4"
   target_type = "ip"
@@ -116,7 +116,7 @@ resource "aws_lb_target_group" "group" {
   health_check {
     enabled             = true
     interval            = 30
-    port                = "8080"
+    port                = "80"
     protocol            = "TCP"
     timeout             = 3
     healthy_threshold   = 3
